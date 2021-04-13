@@ -1,4 +1,3 @@
-
 @store_overload = false
 
 def yoga_shop_decider

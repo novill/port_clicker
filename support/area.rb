@@ -1,13 +1,14 @@
 require_relative 'externals'
+require_relative 'game_points'
 
 MAX_COLOR_DELTA = 16
 
 def check_all_area_colors(point_list_name, quite = false)
-  P[point_list_name].all? { |p| check_color(p, quite) }
+  POINTS[point_list_name].all? { |p| check_color(p, quite) }
 end
 
 def check_any_area_colors(point_list_name, quite = false)
-  P[point_list_name].any? { |p| check_color(p, quite) }
+  POINTS[point_list_name].any? { |p| check_color(p, quite) }
 end
 
 def check_color(point, quite = false)
@@ -17,7 +18,7 @@ def check_color(point, quite = false)
   unless res
     unless quite
       dputs "неуспешная проверка точки #{point}"
-      dputs "Заданный цвет __#{p_color}__"
+      dputs "Заданный цвет __#{fixed_color}__"
       dputs "Экранный цвет __#{screen_color}__"
     end
   end
@@ -29,7 +30,6 @@ def similar_color(color1, color2)
            [color1[3..4], color2[3..4]],
            [color1[5..6], color2[5..6]]
           ]
-
   rgb16.all?{ |s2color| similar_simple_color(s2color)
 end
 

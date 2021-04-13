@@ -1,5 +1,7 @@
-require_relative 'externals'
-require_relative 'area_and'
+require_relative 'area'
+
+MOUSE_SLEEP_MIN = 0.5
+MOUSE_SLEEP_MAX = 0.7
 
 @old_point = nil
 

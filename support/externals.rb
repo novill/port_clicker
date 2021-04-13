@@ -1,6 +1,3 @@
-MOUSE_SLEEP_MIN = 0.5
-MOUSE_SLEEP_MAX = 0.7
-
 DY = 0 # 27
 DX = 0
 
@@ -24,9 +21,9 @@ def mouse_click
 end
 
 def draise(msg)
-  dputs('-'*10)
+  dputs('-' * 10)
   dputs(msg)
-  dputs('-'*10)
+  dputs('-' * 10)
   @log_file.close
   raise msg
 end
