@@ -36,11 +36,9 @@ def logged_sleep(seconds)
   sleep_time.to_i.times do |i|
     sleep 1
     dputs "sleep for #{(sleep_time - i)}" if (i % 5 == 0)
-
-      if i > sleep_time - 6 && i.odd?
-        s = (sleep_time - i).to_s
-        dputs "#{s * 30}\n" * 5
-      end
-
+    if i > sleep_time - 6 && i.odd?
+      s = (sleep_time - i).to_s
+      dputs "#{s * 30}\n" * 5
     end
+  end
 end
