@@ -4,12 +4,12 @@ FIRST_WAIT = 5
 WAIT_INCREASE = 5
 MAX_WAIT = 20
 
-def wait_for_all(area, comment = '')
-  return true if check_all_area_colors(area, false)
+def wait_for_all(area_name)
+  return true if check_all_area_colors(area_name, true)
 
-  until check_all_area_colors(, false, true)
-    dputs "#{Time.now} #{comment}"
-    waiter = FIRST_WAIT
+  waiter = FIRST_WAIT
+  until check_all_area_colors(area_name, true)
+    dputs "#{Time.now} #{area_name}"
     logged_sleep(waiter)
     waiter += WAIT_INCREASE if waiter <= MAX_WAIT
   end
@@ -17,10 +17,10 @@ def wait_for_all(area, comment = '')
 end
 
 def wait_for_any(area, comment = '')
-  return true if check_any_area_colors(area, false, true)
+  return true if check_any_area_colors(area, true)
 
   waiter = FIRST_WAIT
-  until check_any_area_colors(area, false, true)
+  until check_any_area_colors(area, true)
     dputs "#{Time.now} #{comment}"
     logged_sleep(waiter)
     waiter += WAIT_INCREASE if waiter <= MAX_WAIT
@@ -28,16 +28,16 @@ def wait_for_any(area, comment = '')
   false
 end
 
-def logged_sleep(seconds)
+def logged_sleep(seconds = 1)
   return sleep(seconds) if seconds <= 5
 
-  dputs "sleep for #{(sleep_time)}"
+  dputs "sleep for #{seconds}"
 
-  sleep_time.to_i.times do |i|
+  seconds.to_i.times do |i|
     sleep 1
-    dputs "sleep for #{(sleep_time - i)}" if (i % 5 == 0)
-    if i > sleep_time - 6 && i.odd?
-      s = (sleep_time - i).to_s
+    dputs "sleep for #{(seconds - i)}" if i % 5 == 0
+    if i > seconds - 6 && i.odd?
+      s = (seconds - i).to_s
       dputs "#{s * 30}\n" * 5
     end
   end

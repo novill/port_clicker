@@ -1,84 +1,109 @@
 #! ruby
 
-DEBUG = true
-
-require_relative 'runners/*'
-require_relative 'support/*'
-require_relative 'support'
-require_relative 'wait_and_move'
-require_relative 'construction_site_run'
-require_relative 'fisher_run'
+require_relative 'support/game_points'
+require_relative 'support/mouse_move'
+require_relative 'support/wait_and_sleep'
+require_relative 'support/area'
+require_relative 'runners/yoga_shop_run'
 require_relative 'runners/market_run'
-require_relative ']/nners/small_town_run'
-require_relative 'gulf_run'
+require_relative 'runners/small_town_run'
+require_relative 'runners/gulf_run'
 
-@log_file = File.open("seaport_#{Time.now.strftime('%Y-%m-%d_%H_%M_%S')}.log", 'w+')
+@skip_small_town_times = 0
+
+def init_mouse_delta
+  dputs 'Ready to mouse location?'
+  logged_sleep(10)
+  m = getmouselocation
+  dputs m.to_s
+  s = POINTS[:oil_field][0]
+  dputs s.to_s
+  @dx = -(s[0] - m[0])
+  @dy = -(s[1] - m[1])
+  dputs "@dx=#{@dx} @dy=#{@dy}"
+
+  dputs "check market = #{check_color(POINTS[:market], false )}"
+end
 
 def run
-  puts check_area_colors(POINTS[:yoga_shop])
-  puts check_area_colors(POINTS[:local_craftsman])
-  puts check_area_colors(POINTS[:coffee_plantation])
-
-  # puts get_colors(POINTS[:coffee_plantation])
-
-  # xdomove(@small_town[0])
-  # sleep(5)
-  # xdomove(@small_town[1])
-  exit
-
-  # 10_000.times do |i|
-  #   dputs "Цикл #{i}"
-  #   main_circle
-  # end
+  # init_mouse_delta
+  10_000.times do |i|
+    dputs "#{Time.now} Цикл #{i}"
+   main_circle
+  end
 end
 
 def main_circle
   fail_unless_global_position
+  fail_unless_global_position unless wait_for_all(:free_ship)
+  enough_sailors = wait_for_any(:sailors)
 
-  fail_unless_global_position unless wait_for(@free_ship, 'подождать свободный корабль')
-  enough_sailors = wait_for_any(@sailors, 'подождать свободных матросов (от тысячи)')
+  @skip_small_town_times = 5 unless enough_sailors
 
-  @wheelbarrow_ship = check_color(@wheelbarrows_on_ship, true)
-
-  # dputs "корабль #{@wheelbarrow_ship ? '' : 'не'} с тачками "
-
+  # @yoga_ship = check_all_area_colors(:yoga_ship, true)
   dputs 'разгрузили корабль'
-  sleep_move_and_click(@free_ship)
-  @market_no_wheelbarrow = false if @wheelbarrow_ship
+  sleep_move_and_click(:free_ship)
 
   dputs 'выбрали его'
-  sleep_move_and_click(@free_ship)
+  sleep_move_and_click(:free_ship)
 
-  if construction_site_decider
-    dputs 'отправляем набирать тачки'
-    return if construction_site_run
+  dputs 'если закончилось задание'
+  if check_any_area_colors(:resort_ready, true)
+    sleep_move_and_click(:resort_grey)
+    dputs 'принимаем его'
+    sleep_move_and_click(:resort_done_button)
+    dputs 'и закрваем потому что иначе сложно c логикой'
+    sleep_move_and_click(:resort_close_button)
+    logged_sleep(2)
+  end
+  dputs 'если новое задание активно'
+  if check_all_area_colors(:resort_active, true)
+    dputs 'открываем его окно'
+    sleep_move_and_click(:resort_active)
+    if check_all_area_colors(:resort_send_button, false)
+      dputs 'если есть кнопка отправить - отправляем'
+      sleep_move_and_click(:resort_send_button)
+      return
+    else
+      dputs 'если нечего везти - закрваем'
+      sleep_move_and_click(:resort_close_button)
+    end
   end
 
-  dputs 'отправляем продавать тачки'
-  unless @market_no_wheelbarrow
-    return if market_run
+  if yoga_shop_decider
+    dputs 'отправляем набирать yoga'
+    return if yoga_shop_run
   end
 
-  dputs 'если набирать тачки и продавать не стали, отправить корабль за золотом'
-  if enough_sailors && @big_ship && rand(10) > 5
+  dputs 'отправляем продавать yoga'
+  return if market_run
+
+  dputs 'если набирать yoga и продавать не стали, отправить корабль за золотом'
+  if enough_sailors && @skip_small_town_times <= 0
     dputs 'в small_town'
     small_town_run
   else
+    @skip_small_town_times -= 1
     dputs 'в Gulf'
     gulf_run
   end
 end
 
-def fail_unless_global_position
-  mouse_move(@empty_space)
-  sleep_to
-  raise_unless_area(@general_goods, 'general_goods')
-  draise 'no ship button' unless check_area_colors(@busy_ship, false, true) || check_area_colors(@free_ship, false, true)
+# 2021-04-20 06:25:32 +0300 Цикл 137
+# неуспешная проверка точки [358, 447, "#22C901"]
+# Заданный цвет __#22C901__
+# Экранный цвет __#007DF1__
+# ----------
+# No any_ship ["#007DF1", "#006DD3", "#007DF1", "#006DD3"]
 
-  raise_unless_area(@small_town, 'small_town')
-  raise_unless_area(@market, 'market')
-  # raise_unless_area(@port_button, 'port_button')
-  raise_unless_area(@gulf, 'gulf')
+def fail_unless_global_position
+  # checking_points = [:market, :small_town, :gulf, :oil_field, :yoga_shop, :any_ship]
+  checking_points = %i[market small_town gulf any_ship]
+
+  mouse_move(:empty_space)
+  mouse_sleep
+  checking_points.each do |check_point|
+    raise_unless_area(check_point)
+  end
 end
 
-run
