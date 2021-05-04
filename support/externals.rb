@@ -1,7 +1,7 @@
 @dy = 0 #27
 @dx = 0
 
-@log_file = File.open("seaport_#{Time.now.strftime('%Y-%m-%d_%H_%M_%S')}.log", 'w+')
+@log_file = File.open("log/seaport_#{Time.now.strftime('%Y-%m-%d_%H_%M_%S')}.log", 'w+')
 
 def getmouselocation
   `xdotool getmouselocation`.split(' ')[0..1].map { |s| s.split(':')[1].to_i }

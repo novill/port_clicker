@@ -68,7 +68,7 @@ def raise_unless_area(area)
     dputs("any_ship double wait")
     logged_sleep(3)
   end
-  unless check_all_area_colors(area, false)
+  unless check_area_colors_by_name(area, false)
     printscreen
     draise "No #{area} #{get_colors(area)}"
   end

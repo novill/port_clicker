@@ -8,6 +8,7 @@ require_relative 'runners/yoga_shop_run'
 require_relative 'runners/market_run'
 require_relative 'runners/small_town_run'
 require_relative 'runners/gulf_run'
+require_relative 'runners/global_quest_run'
 
 @skip_small_town_times = 0
 
@@ -47,28 +48,7 @@ def main_circle
   dputs 'выбрали его'
   sleep_move_and_click(:free_ship)
 
-  dputs 'если закончилось задание'
-  if check_any_area_colors(:resort_ready, true)
-    sleep_move_and_click(:resort_grey)
-    dputs 'принимаем его'
-    sleep_move_and_click(:resort_done_button)
-    dputs 'и закрваем потому что иначе сложно c логикой'
-    sleep_move_and_click(:resort_close_button)
-    logged_sleep(2)
-  end
-  dputs 'если новое задание активно'
-  if check_all_area_colors(:resort_active, true)
-    dputs 'открываем его окно'
-    sleep_move_and_click(:resort_active)
-    if check_all_area_colors(:resort_send_button, false)
-      dputs 'если есть кнопка отправить - отправляем'
-      sleep_move_and_click(:resort_send_button)
-      return
-    else
-      dputs 'если нечего везти - закрваем'
-      sleep_move_and_click(:resort_close_button)
-    end
-  end
+  return if global_quest_run
 
   if yoga_shop_decider
     dputs 'отправляем набирать yoga'
@@ -88,13 +68,6 @@ def main_circle
     gulf_run
   end
 end
-
-# 2021-04-20 06:25:32 +0300 Цикл 137
-# неуспешная проверка точки [358, 447, "#22C901"]
-# Заданный цвет __#22C901__
-# Экранный цвет __#007DF1__
-# ----------
-# No any_ship ["#007DF1", "#006DD3", "#007DF1", "#006DD3"]
 
 def fail_unless_global_position
   # checking_points = [:market, :small_town, :gulf, :oil_field, :yoga_shop, :any_ship]
