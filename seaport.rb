@@ -9,6 +9,7 @@ require_relative 'runners/market_run'
 require_relative 'runners/small_town_run'
 require_relative 'runners/gulf_run'
 require_relative 'runners/global_quest_run'
+require_relative 'runners/remove_captain'
 
 @skip_small_town_times = 0
 
@@ -30,7 +31,7 @@ def run
   # init_mouse_delta
   10_000.times do |i|
     dputs "#{Time.now} Цикл #{i}"
-   main_circle
+    main_circle
   end
 end
 
@@ -44,11 +45,9 @@ def main_circle
   # @yoga_ship = check_all_area_colors(:yoga_ship, true)
   dputs 'разгрузили корабль'
   sleep_move_and_click(:free_ship)
-
+  remove_captain_if_needed
   dputs 'выбрали его'
   sleep_move_and_click(:free_ship)
-
-  return if global_quest_run
 
   if yoga_shop_decider
     dputs 'отправляем набирать yoga'

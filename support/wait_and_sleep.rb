@@ -1,8 +1,8 @@
 require_relative 'area'
 
-FIRST_WAIT = 5
-WAIT_INCREASE = 5
-MAX_WAIT = 20
+FIRST_WAIT = 3
+WAIT_INCREASE = 3
+MAX_WAIT = 25
 
 def wait_for_all(area_name)
   return true if check_all_area_colors(area_name, true)
@@ -23,7 +23,7 @@ def wait_for_any(area, comment = '')
   until check_any_area_colors(area, true)
     dputs "#{Time.now} #{comment}"
     logged_sleep(waiter)
-    waiter += WAIT_INCREASE if waiter <= MAX_WAIT
+    waiter += WAIT_INCREASE if waiter < MAX_WAIT
   end
   false
 end
