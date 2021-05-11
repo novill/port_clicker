@@ -1,0 +1,1 @@
+ScreenObject = Struct.new(:name, :type, points: [])

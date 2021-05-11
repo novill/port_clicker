@@ -1,8 +1,7 @@
 require_relative 'externals'
+require_relative '../archive/game_points'
 
 MAX_COLOR_DELTA = 16
-
-
 
 def check_area_colors_by_name(point_list_name, quite = false)
   if point_list_name.to_s['any_']
