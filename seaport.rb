@@ -8,8 +8,9 @@ require_relative 'runners/yoga_shop_run'
 require_relative 'runners/market_run'
 require_relative 'runners/small_town_run'
 require_relative 'runners/gulf_run'
-require_relative 'runners/global_quest_run'
+# require_relative 'runners/global_quest_run'
 require_relative 'runners/remove_captain'
+require_relative 'runners/merhant_maria_run'
 
 @skip_small_town_times = 0
 
@@ -45,9 +46,13 @@ def main_circle
   # @yoga_ship = check_all_area_colors(:yoga_ship, true)
   dputs 'разгрузили корабль'
   sleep_move_and_click(:free_ship)
-  remove_captain_if_needed
+  # remove_captain_if_needed
   dputs 'выбрали его'
   sleep_move_and_click(:free_ship)
+
+  return if merchant_maria_run
+
+  return if edgar_run
 
   if yoga_shop_decider
     dputs 'отправляем набирать yoga'

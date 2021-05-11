@@ -52,7 +52,7 @@ def random_area_point(point_list_name)
   area = POINTS[point_list_name]
   xx = [area[0][0], area[1][0]].sort
   yy = [area[0][1], area[1][1]].sort
-  [rand((xx[0] + safe_xy)..(xx[1] - safe_xy)), rand((yy[0] + safe_xy)..(yy[1] - safe_xy))]
+  [rand((xx[0] + safe_xy)..(xx[1] - safe_xy)) || xx[0], rand((yy[0] + safe_xy)..(yy[1] - safe_xy)) || yy[0]]
 end
 
 def get_colors(point_list_name)
