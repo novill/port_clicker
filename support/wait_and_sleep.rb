@@ -4,26 +4,14 @@ FIRST_WAIT = 3
 WAIT_INCREASE = 3
 MAX_WAIT = 25
 
-def wait_for_all(area_name)
-  return true if check_all_area_colors(area_name, true)
+def wait_for(screen_object)
+  return true if check_area_colors(screen_object, true)
 
   waiter = FIRST_WAIT
-  until check_all_area_colors(area_name, true)
-    dputs "#{Time.now} #{area_name}"
+  until check_area_colors(screen_object, true)
+    dputs "#{Time.now} #{screen_object.name}"
     logged_sleep(waiter)
     waiter += WAIT_INCREASE if waiter <= MAX_WAIT
-  end
-  false
-end
-
-def wait_for_any(area, comment = '')
-  return true if check_any_area_colors(area, true)
-
-  waiter = FIRST_WAIT
-  until check_any_area_colors(area, true)
-    dputs "#{Time.now} #{comment}"
-    logged_sleep(waiter)
-    waiter += WAIT_INCREASE if waiter < MAX_WAIT
   end
   false
 end
@@ -31,14 +19,9 @@ end
 def logged_sleep(seconds = 1)
   return sleep(seconds) if seconds <= 5
 
-  dputs "sleep for #{seconds}"
-
   seconds.to_i.times do |i|
+    remain = seconds - i
     sleep 1
-    dputs "sleep for #{(seconds - i)}" if i % 5 == 0
-    if i > seconds - 6 && i.odd?
-      s = (seconds - i).to_s
-      dputs "#{s * 30}\n" * 5
-    end
+    dputs "sleep for #{remain}" if (remain < 5) || (remain % 5 == 0)
   end
 end

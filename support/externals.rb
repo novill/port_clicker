@@ -1,6 +1,3 @@
-@dy = 27
-@dx = 0
-
 @log_file = File.open("log/seaport_#{Time.now.strftime('%Y-%m-%d_%H_%M_%S')}.log", 'w+')
 
 def getmouselocation
