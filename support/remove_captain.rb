@@ -1,8 +1,3 @@
-@captain_field = ScreenObject.new(
-    'captain_field',
-    :fixed,
-    [[500, 350, '#FFD700'], [533, 350, '#FFD700']]
-)
 
 @captain_remove_button = ScreenObject.new(
     'captain_remove_button',

@@ -1,4 +1,4 @@
-@excavation = ScreenObject.new('excavation', :moveable, [[1246, 258, '#27385E'], [1272, 280, '#27375C']])
+@excavation = ScreenObject.new('excavation', :moveable, [[1245, 262, '#27385E'], [1272, 280, '#27375C']])
 @excavation_overload_form = ScreenObject.new('excavation_overload_form', :moveable, [[792, 342, '#E90046'], [1107, 405, '#E90046']])
 @excavation_overload_ok_button = ScreenObject.new('excavation_overload_ok_button', :moveable, [[908, 642, 'красный'], [1049, 710, '#красный2']])
 @excavation_big_ok_button = ScreenObject.new('excavation_big_ok_button', :moveable, [[977, 644, '#0079F8'], [1110, 708, '#0061C8']])

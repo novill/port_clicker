@@ -4,15 +4,23 @@ def getmouselocation
   `xdotool getmouselocation`.split(' ')[0..1].map { |s| s.split(':')[1].to_i }
 end
 
-def get_color(point)
+def dx(point_type = nil)
+  @dx # + (point_type == :moveable ? @field_dx : 0)
+end
+
+def dy(point_type = nil)
+  @dy #+ (point_type == :moveable ? @field_dx : 0) + (point_type == :ads_dy ? @ads_dy : 0)
+end
+
+def get_color(point, point_type = nil)
   draise 'no point' if !point || point[0].to_i.zero? || point[1].to_i.zero?
   # медленно работает, грузит видеосистему
-  pixel_command = "/usr/bin/import -silent -window root -crop 1x1+#{point[0].to_i + @dx}+#{point[1].to_i + @dy} -depth 8 txt:-"
+  pixel_command = "/usr/bin/import -silent -window root -crop 1x1+#{point[0].to_i + dx(point_type)}+#{point[1].to_i + dy(point_type)} -depth 8 txt:-"
   `#{pixel_command}`.split(' ')[-2]
 end
 
-def xdomove(point)
-  `xdotool mousemove #{point[0] + @dx} #{point[1] + @dy} `
+def xdomove(point, point_type = nil)
+  `xdotool mousemove #{point[0] + dx(point_type)} #{point[1] + dy(point_type)} `
 end
 
 def mouse_click

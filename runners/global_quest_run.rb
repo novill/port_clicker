@@ -6,9 +6,9 @@
 @global_send_button  = ScreenObject.new('global_send_button', :moveable, [[818, 685, '#0079F8'], [950, 742, '#0059B8']])
 
 def global_quest_run
-  dputs 'если закончилось задание'
   ended_task = check_any_area_colors(@global_ready, true)
   if ended_task
+    dputs 'если закончилось задание'
     sleep_move_and_click(@global_grey)
     dputs 'принимаем его'
     sleep_move_and_click(@global_done_button)
@@ -16,9 +16,10 @@ def global_quest_run
     sleep_move_and_click(@global_close_button)
     logged_sleep(2)
   end
-  if ended_task || check_all_area_colors(@global_ready, true)
-    dputs 'открываем  окно'
-    sleep_move_and_click(@global_ready)
+
+  if ended_task || check_all_area_colors(@global_active, true)
+    dputs 'готово к выполнению новое задание'
+    sleep_move_and_click(@global_active)
     mouse_free
     if check_any_area_colors(@global_send_button, false)
       dputs 'если есть кнопка отправить - отправляем'
@@ -28,6 +29,7 @@ def global_quest_run
 
     dputs 'если нечего везти - закрваем'
     sleep_move_and_click(@global_close_button)
+    logged_sleep(2)
     return false
   end
 end
